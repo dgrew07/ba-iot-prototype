@@ -1,0 +1,23 @@
+[{
+	"time": "2016-03-17T19:50:20.851Z",
+	"timeOffset": "0.7780",
+	"isActive": true,
+	"latitude": -90.0001,
+	"longitude": -180.0001,
+	"altitude": 1.0000,
+	"speed": 30.0002,
+	"heading": 50.0050,
+	"climb": 0.2051,
+	"error": [{
+		"latitude": "n/a",
+		"longitude": "n/a",
+		"altitude": "n/a",
+		"heading": "n/a",
+		"speed": "n/a"
+	}]
+}]
+
+[{"time": "2016-03-17T19:50:20.851Z","timeOffset": "0.7780","isActive": true,"latitude": -90.0001,"longitude": -180.0001,"altitude": 1.0000,"speed": 30.0002,"heading": 50.0050,"climb": 0.2051,"error": [{"latitude": "n/a","longitude": "n/a","altitude": "n/a","heading": "n/a","speed": "n/a"}]}]
+[{"time": "2016-03-17T19:51:20.851Z","timeOffset": "0.7580","isActive": true,"latitude": -89.0001,"longitude": -179.0001,"altitude": 1.0020,"speed": 31.0002,"heading": 51.0050,"climb": 0.3051,"error": [{"latitude": "n/a","longitude": "n/a","altitude": "n/a","heading": "n/a","speed": "n/a"}]}]
+[{"time": "2016-03-17T19:52:20.851Z","timeOffset": "0.6780","isActive": true,"latitude": -88.0001,"longitude": -177.0001,"altitude": 1.0500,"speed": 33.0002,"heading": 51.0050,"climb": 0.3551,"error": [{"latitude": "n/a","longitude": "n/a","altitude": "n/a","heading": "n/a","speed": "n/a"}]}]
+[{"time": "2016-03-17T19:50:20.851Z","timeOffset": "0.6680","isActive": true,"latitude": -87.0001,"longitude": -175.0001,"altitude": 1.1000,"speed": 35.0000,"heading": 51.0050,"climb": 0.1051,"error": [{"latitude": "n/a","longitude": "n/a","altitude": "n/a","heading": "n/a","speed": "n/a"}]}]
