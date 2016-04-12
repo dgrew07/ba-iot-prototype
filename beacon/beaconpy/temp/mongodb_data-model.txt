@@ -1,0 +1,31 @@
+#
+# MongoDB data model
+# user.raw.trip
+#
+
+{
+    _id: TRIP_ID                            
+    user_id: USER_ID,                       # single-user application
+    time_start: DATE_TIME,                  # timestamp
+    time_end: DATE_TIME,                    # timestamp
+    info: TEXT,                             # description
+    reports: [	
+        {
+            time_utc: DATE_TIME,            # timestamp
+            time_local: DATE_TIME,          # timestamp
+            gpsfixtime_utc: DATE_TIME,      # timestamp
+            gpslatitude: DOUBLE,           
+            gpslongitude: DOUBLE,
+            gpsaltitude: DOUBLE,   
+            gpsspeed: DOUBLE,
+            gpsmode: TEXT,
+            gpssats: INT, 
+            accax: DOUBLE,
+            accay: DOUBLE,
+            accaz: DOUBLE
+        },
+        {
+            ...
+        }
+   ]
+}
