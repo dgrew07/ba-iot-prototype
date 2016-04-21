@@ -5,7 +5,7 @@
 The program is built around the MPU-6050 accelerometer & gyroscope sensor and the Navilock NL-302U GPS dongle, but any GPS device which is supported by the python gpsd daemon will do. Please refer to http://catb.org/gpsd/ in order to see if your device and operating system is supported.
 
 #### Installing required software and packages
-The beacon was developed for Bananian Linux, an optimised version of Debian 8 for Banana Pi/Pro. Below a breif instruction will show you how to install and configure the required software with the apt package manager.
+The beacon was developed for Bananian Linux, an optimised version of Debian 8 for Banana Pi/Pro. Below a brief instruction will show you how to install and configure the required software and hardware with the apt package manager.
 ##### Install and run gpsd GPS daemon
 - use `sudo apt-get install gpsd gpsd-clients`
 - connect a supported USB GPS dongle to a linux platform
