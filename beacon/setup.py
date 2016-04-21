@@ -14,7 +14,7 @@ config = {
     'version': '0.1',
     # require 'nose' for testing
     'install_requires': [],
-    'packages': ['beacon'],
+    'packages': ['beaconpy'],
     'scripts': [],
     'name': 'beacon'
 }
