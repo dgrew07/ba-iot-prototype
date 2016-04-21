@@ -11,12 +11,12 @@ The beacon was developed for Bananian Linux, an optimised version of Debian 8 fo
 - connect a supported USB GPS dongle to a linux platform
 - use `lsusb` to see if the GPS dongle was recognised
 - use `dmesg` to find the mounting path of the dongle, e.g. `/dev/ttyUSB0`
-- run gpsd with `gpsd -n /dev/ttyUSB0`, which will force gpsd to always to read data from the dongle even if no application requesting GPS positions is running
+- run gpsd with `gpsd -n /dev/ttyUSB0`, which will force gpsd to always read data from the dongle, even if no application requesting GPS positions is running
 - run `cgps` or `gpsmon` to see if the dongle is transmitting data
-Please refer to the gpsd ddocumentation for further information: http://www.catb.org/gpsd/#documentation
+Please refer to the gpsd documentation for further information: http://www.catb.org/gpsd/#documentation
 
 ##### Connect the MPU-6050 sensor
-- use the Fritzing-sketch in `beacon/docs` to see how the sensor needs to be wired to a Banana Pi M1
+- use the Fritzing-sketch in `beacon/docs` to see how the sensor needs to be wired to the Banana Pi's GPIO pins
 - see list of i2c-busses the MPU-6050 could be running on: `ls -l /dev/i2c*`
 - use `i2cdetect -y <bus-nr>` e.g. `i2cdetect -y 1`, the default MPU-6050 address should be `0x68` 
 - install `sudo apt-get install build-essential libi2c-dev i2c-tools python-dev` and reboot
