@@ -10,7 +10,13 @@ def main():
   
   os.system('clear') # clear terminal screen
   try:
-  
+    
+    # run calibration on startup
+    #if config.calibrate_acc == True:
+      #import calibration.accelerometer
+      
+      
+      
     # init dispatching thread_acc
     thread_repdispatcher = reporter.ReportDispatcher(data.trip_dict, data.report_queue)
     # init + start poller threads
@@ -60,6 +66,7 @@ def main():
         print '----------------------------------------------------------------'
         print ' Letzter Report:               ' , data.report_dict['time']
         print ' Reports in Warteschlange:     ' , data.report_queue.qsize()
+        print         
       
       time.sleep(config.tick_visualization) 
 

@@ -41,10 +41,30 @@ class GpsPoller(threading.Thread):
       # write latest gps data to referenced dict
       try:
         self.gps_dict['fixtime'] = helpers.ToIso(self.session.fix.time)
-        self.gps_dict['latitude'] = self.session.fix.latitude
-        self.gps_dict['longitude'] = self.session.fix.longitude
-        self.gps_dict['altitude'] = self.session.fix.altitude
-        self.gps_dict['speed'] = self.session.fix.speed
+        
+        if hasattr(self.session.fix, 'latitude'):
+          if math.isnan(self.session.fix.latitude) != True:
+            self.gps_dict['latitude'] = self.session.fix.latitude
+          else:
+            self.gps_dict['latitude'] = None
+          
+        if hasattr(self.session.fix, 'longitude'):
+          if math.isnan(self.session.fix.longitude) != True:
+            self.gps_dict['longitude'] = self.session.fix.longitude
+          else:
+            self.gps_dict['longitude'] = None
+          
+        if hasattr(self.session.fix, 'altitude'):
+          if math.isnan(self.session.fix.altitude) != True:
+            self.gps_dict['altitude'] = self.session.fix.altitude
+          else:
+            self.gps_dict['altitude'] = None
+          
+        if hasattr(self.session.fix, 'speed'):
+          if math.isnan(self.session.fix.speed) != True:
+            self.gps_dict['speed'] = self.session.fix.speed
+          else:
+            self.gps_dict['speed'] = None
         # decode mode value
         if self.session.fix.mode == 3:
           self.gps_dict['mode'] = '3D'

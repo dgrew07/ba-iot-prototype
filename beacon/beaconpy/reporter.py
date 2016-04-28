@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import threading, datetime, time, os, json, glob, httplib, urllib2
+import threading, datetime, time, os, json, glob, httplib, urllib2, pickle
 import config, data, helpers
 
 class ReportBuilder(threading.Thread):
@@ -42,7 +42,7 @@ class ReportBuilder(threading.Thread):
       self.report_dict['counter'] = self.counter
       self.report_dict['time'] = helpers.ToIso(helpers.UtcNow()) 
       self.report_dict['gps_fixtime'] = self.gps_dict['fixtime']
-      self.report_dict['gps_latitude'] = self.gps_dict['altitude']
+      self.report_dict['gps_latitude'] = self.gps_dict['latitude']
       self.report_dict['gps_longitude'] = self.gps_dict['longitude']
       
       if self.gps_dict['mode'] == '3D': # find a way to assure the quality of gps data
@@ -59,8 +59,7 @@ class ReportBuilder(threading.Thread):
       self.report_dict['acc_axis_y'] = self.acc_dict['axis_y']
       self.report_dict['acc_axis_z'] = self.acc_dict['axis_z']
       
-      print self.report_dict.items()
-      self.report_queue.put(json.dumps(self.report_dict))
+      self.report_queue.put(self.report_dict.copy())
       
 class ReportDispatcher(threading.Thread):
   """
@@ -107,22 +106,13 @@ class ReportDispatcher(threading.Thread):
     except:
       raise
     
-    """try:
-      params = urllib.urlencode(json.dumps(package)
-      #headers = "{'Content-type': 'application/x-www-form-urlencoded', 'Accept': 'text/plain'}"
-      conn = httplib.HTTPConnection(config.server_addr)
-      conn.request('POST', config.server_apipath, params)
-      resp = conn.getresponse()
-      data = resp.read()
-      print data
-    except:
-      print resp.status, resp.reason
-    
     try:
-      req = urllib2.Request(config.server_addr + config.server_apipath)
-      req.add_header('Content-Type', 'application/json')
-      response = urllib2.urlopen(req, json.dumps(package))
+      url = 'http://' + config.server_addr + config.server_apipath
+      request = urllib2.Request(url)
+      request.add_header('Content-Type', 'application/json')
+      response = urllib2.urlopen(request, json.dumps(self.trip_dict))
       print response
     except:
-      print response.code"""
+      raise
+    
     
