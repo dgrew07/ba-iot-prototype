@@ -3,6 +3,23 @@
 
 import os, time, smbus, math
 
+"""Calibration script for the accelerometer."""
+
+"""
+  Calculate the tripple axis offsets from expected readings.  
+  x-axis should read zero.
+  y-axis should read zero.
+  z-axis should read 1g = 9.81 m/s^2.
+  
+  @param power_mgmt_1 -- power management register 1 (defaults to 0x6b)   
+  @param power_mgmt_2 -- power management register 2 (defaults to 0x6c)   
+  @param bus -- i2c device bus (defaults to 2)   
+  @param address -- i2c address (defaults to 0x68)   
+  @param addr_x -- x-value register of the accelerometer (defaults to 0x3b)
+  @param addr_y -- y-value register of the accelerometer (defaults to 0x3d)
+  @param addr_z -- z-value register of the accelerometer (defaults to 0x3f)   
+  @return object of offsets e.g. offsets.x
+  """
 def calibrate_acc(power_mgmt_1 = 0x6b, power_mgmt_2 = 0x6c, bus = 2, address = 0x68, addr_x = 0x3b, addr_y = 0x3d, addr_z = 0x3f): 
   os.system('clear') 
 
@@ -24,19 +41,6 @@ def calibrate_acc(power_mgmt_1 = 0x6b, power_mgmt_2 = 0x6c, bus = 2, address = 0
   #power_mgmt_1 = 0x6b
   #power_mgmt_2 = 0x6c
 
-  def read_word(adr):
-    high = bus.read_byte_data(address, adr)
-    low = bus.read_byte_data(address, adr+1)
-    val = (high << 8) + low
-    return val
-
-  def read_word_2c(adr):
-    val = read_word(adr)
-    if (val >= 0x8000):
-        return -((65535 - val) + 1)
-    else:
-        return val
-
   devbus = smbus.SMBus(bus) 
   #address = 0x68       
 
@@ -56,24 +60,18 @@ def calibrate_acc(power_mgmt_1 = 0x6b, power_mgmt_2 = 0x6c, bus = 2, address = 0
 
   err_acc = 8
 
-  offs_ax = 0
-  offs_ay = 0
-  offs_az = 0
-
   while i < (buffersize + 101):
     if i > 100 and i <= (buffersize + 100):
-      buff_ax += read_word_2c(addr_x)
-      buff_ay += read_word_2c(addr_y)
-      buff_az += read_word_2c(addr_z)
+      buff_ax += read_number2c(devbus, address, addr_x)
+      buff_ay += read_number2c(devbus, address, addr_y)
+      buff_az += read_number2c(devbus, address, addr_z)
     if i == (buffersize + 100):
       mean_ax = buff_ax / buffersize
       mean_ay = buff_ay / buffersize
       mean_az = buff_az / buffersize
     i += 1
 
-  offs_ax = mean_ax 
-  offs_ay = mean_ay 
-  offs_az = mean_az
+  offsets = Bunch(x = mean_ax, y = mean_ay, z = mean_az)
 
   print 
   print '  Fertig!                                                    '
@@ -85,15 +83,61 @@ def calibrate_acc(power_mgmt_1 = 0x6b, power_mgmt_2 = 0x6c, bus = 2, address = 0
   print '  Fehlertoleranz (skaliert)          ' , err_acc/16384
   print '  Fehlertoleranz (m/s^2)             ' , err_acc*(9.80665/16384)
   print 
-  print '  Offset X-Achse (raw)               ' , offs_ax
-  print '  Offset X-Achse (skaliert)          ' , offs_ax/16384
-  print '  Offset X-Achse (m/s^2)             ' , offs_ax*(9.80665/16384)
+  print '  Offset X-Achse (raw)               ' , offsets.x
+  print '  Offset X-Achse (skaliert)          ' , offsets.x/16384
+  print '  Offset X-Achse (m/s^2)             ' , offsets.x*(9.80665/16384)
   print 
-  print '  Offset Y-Achse (raw)               ' , offs_ay
-  print '  Offset Y-Achse (skaliert)          ' , offs_ay/16384
-  print '  Offset Y-Achse (m/s^2)             ' , offs_ay*(9.80665/16384)
+  print '  Offset Y-Achse (raw)               ' , offsets.y
+  print '  Offset Y-Achse (skaliert)          ' , offsets.y/16384
+  print '  Offset Y-Achse (m/s^2)             ' , offsets.y*(9.80665/16384)
   print 
-  print '  Offset Z-Achse (raw)               ' , offs_az
-  print '  Offset Z-Achse (skaliert)          ' , offs_az/16384
-  print '  Offset Z-Achse (m/s^2)             ' , offs_az*(9.80665/16384)
+  print '  Offset Z-Achse (raw)               ' , offsets.z
+  print '  Offset Z-Achse (skaliert)          ' , offsets.z/16384
+  print '  Offset Z-Achse (m/s^2)             ' , offsets.z*(9.80665/16384)
   print '-------------------------------------------------------------'
+  
+  # sleep to allow reading the offsets (debugging)
+  print
+  print ' Warte 10 Sekunden... '
+  time.sleep(10)
+  
+  return offsets
+
+# TODO: dupes with functions in ../poller.py -> export into package e.g. helpers
+def read_number(bus, address, adr):
+  """
+  Read two 8bit registers of an i2c device and add them, which gives a 16bit number in two's complement. 
+  
+  @param adr -- register address
+  @return 16bit number in two's complement
+  """
+    
+  high = bus.read_byte_data(address, adr)
+  low = bus.read_byte_data(address, adr + 1)
+  val = (high << 8) + low # shift high 8 bits to the left and add low
+  return val
+
+def read_number2c(bus, address, adr):
+  """
+  Transform a 16bit number (two's complement ) to an integer.
+   
+  @param adr -- register address
+  @return integer (+/- 32768)
+  """
+    
+  val = read_number(bus, address, adr)
+  if (val >= 0x8000):
+    return -((65535 - val) + 1)
+  else:
+    return val
+
+class Bunch:
+  """
+  Helper class to init json-printable objects.
+  """
+  
+  def __init__(self, **kwds):
+    self.__dict__.update(kwds)
+  def to_JSON(self):
+    return json.dumps(self, default = lambda o: o.__dict__, 
+      sort_keys = True)

@@ -1,0 +1,164 @@
+<!-- page heading -->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">
+            {{trip.info}} <small>&nbsp;&nbsp;&nbsp;{{trip._id}}   </small> 
+            <span class="pull-right"><a href ng-click="refresh()"><i class="fa fa-refresh"> </i></a> &nbsp; <a href ng-click="deleteTrip()"><i class="fa fa-trash-o" aria-hidden="true"></i></a></span>
+        </h3>
+    </div>
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">Allgemeine Fahrtdaten</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3"><b>Start</b>: <br>{{trip.time_start | date:'HH:mm'}} Uhr
+                    </div> 
+                    <div class="col-lg-3"><b>Ende</b>: <br>{{trip.time_end | date:'HH:mm'}} Uhr
+                    </div>  
+                    <div class="col-lg-3"><b>gefahrene km</b>: <br>{{trip.length?(trip.length):"-" | number:2}} km
+                    </div>
+                    <div class="col-lg-3"><b>Fahrzeit</b>: <br> {{trip.time_diff?(trip.time_diff):"-"  | duration}} Std.
+                    </div>
+                </div>     
+            </div>
+        </div>
+        
+        <div ng-hide="trip.analysed" class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <center>
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Keine Analysedaten zu dieser Fahrt vorhanden!</strong> <br><br>
+                <button ng-click="analyseTrip()" type="button" class="btn btn-default">Analyse jetzt durchführen <i class="fa fa-line-chart" aria-hidden="true"></i></button>
+            </center>
+        </div>
+        
+        
+        <div ng-show="trip.analysed" class="panel panel-default">
+            <div class="panel-heading">Geschwindigkeit</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3"><b>&#216; Geschwindigkeit</b>: <br>{{trip.analysis.mean_speed?(trip.analysis.mean_speed):"-" | number:2}} km/h
+                    </div> 
+                    <div class="col-lg-3"><b>max. Geschwindigkeit</b>: <br>{{trip.analysis.max_speed?(trip.analysis.max_speed):"-" | number:2}} km/h
+                    </div>  
+                    <div class="col-lg-3"><b>&sigma; Geschwindigkeit</b>: <br>{{trip.analysis.std_speed?(trip.analysis.std_speed):"-" | number:2}} kmh/h
+                    </div>
+                    <div class="col-lg-3"><b># Übertretungen</b>: <br>{{trip.analysis.speed_violations?(trip.analysis.speed_violations):"-"}}
+                    </div> 
+                </div>    
+            </div>    
+        </div>
+        
+        <div ng-show="trip.analysed" class="panel panel-default">
+            <div class="panel-heading">Beschleunigungsverhalten</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-4"><b>&#216; Beschleunigung</b>: <br>{{trip.analysis.mean_ax_pos?(trip.analysis.mean_ax_pos):"-" | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-4"><b>max. Beschleunigung</b>: <br>{{trip.analysis.max_ax_pos?(trip.analysis.max_ax_pos):"-" | number:2}} m/s&sup2;
+                    </div>  
+                    <div class="col-lg-4"><b>&sigma; Beschleunigung</b>: <br>{{trip.analysis.std_ax_pos?(trip.analysis.std_ax_pos):"-" | number:2}} m/s&sup2;
+                    </div> 
+                </div>    
+            </div>    
+        </div>
+        
+        <div ng-show="trip.analysed" class="panel panel-default">
+            <div class="panel-heading">Bremsverhalten</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-4"><b>&#216; Bremskraft</b>: <br>{{trip.analysis.mean_ax_neg?(trip.analysis.mean_ax_neg):"-" | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-4"><b>max. Bremskraft</b>: <br>{{trip.analysis.min_ax_neg?(trip.analysis.min_ax_neg):"-" | number:2}} m/s&sup2;
+                    </div>  
+                    <div class="col-lg-4"><b>&sigma; Bremskraft</b>: <br>{{trip.analysis.std_ax_neg?(trip.analysis.std_ax_neg):"-" | number:2}} m/s&sup2;
+                    </div>
+                </div>    
+            </div>    
+        </div>
+        
+        <div ng-show="trip.analysed" class="panel panel-default">
+            <div class="panel-heading">Kurvenfahrverhalten Linkskurven</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-4"><b>&#216; Kraft</b>: <br>{{trip.analysis.mean_ay_neg?(trip.analysis.mean_ay_neg):"-" | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-4"><b>max. Kraft</b>: <br>{{trip.analysis.min_ay_neg?(trip.analysis.min_ay_neg):"-" | number:2}} m/s&sup2;
+                    </div>  
+                    <div class="col-lg-4"><b>&sigma; Kraft</b>: <br>{{trip.analysis.std_ay_neg?(trip.analysis.std_ay_neg):"-" | number:2}} m/s&sup2;
+                    </div>
+                </div>    
+            </div>    
+        </div>
+        
+        <div ng-show="trip.analysed" class="panel panel-default">
+            <div class="panel-heading">Kurvenfahrverhalten Rechtskurven</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-4"><b>&#216; Kraft</b>: <br>{{trip.analysis.mean_ay_pos?(trip.analysis.mean_ay_pos):"-" | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-4"><b>max. Kraft</b>: <br>{{trip.analysis.max_ay_pos?(trip.analysis.max_ay_pos):"-" | number:2}} m/s&sup2;
+                    </div>  
+                    <div class="col-lg-4"><b>&sigma; Kraft</b>: <br>{{trip.analysis.std_ay_pos?(trip.analysis.std_ay_pos):"-" | number:2}} m/s&sup2;
+                    </div>
+                </div>    
+            </div>    
+        </div>
+        
+         <div ng-show="trip.analysed" class="panel panel-default">
+            <div class="panel-heading">Streckeninformationen</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-4"><b>bevorzugter Straßentyp</b>: <br>{{trip.analysis.favorite_highway?(trip.analysis.favorite_highway):"-"}}
+                    </div> 
+                    <div class="col-lg-4"><b>in Prozent</b>: <br>{{trip.analysis.favorite_highway_perc?(trip.analysis.favorite_highway_perc * 100):"-" | number:2}}%
+                    </div> 
+                    <div class="col-lg-4"><b>Ort der Fahrt</b>: <br>{{trip.analysis.favorite_location?(trip.analysis.favorite_location):"-"}} 
+                    </div>  
+                </div>    
+            </div>    
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li><a href class="active" data-toggle="tab" ng-click="currentTab = 1"><i class="fa fa-database" aria-hidden="true"></i> Rohdaten</a></li>
+            <li><a href data-toggle="tab" ng-click="currentTab = 2"><i class="fa fa-map-o" aria-hidden="true"></i> Fahrtroute auf Karte</a></li>
+        </ul>
+        
+        <div class="tab-content">
+            <div ng-if="currentTab === 1" class="tab-pane fade in active">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table ng-table="reportsTable" class="table table-bordered table-striped table-condensed">
+                            <tr ng-repeat="report in data track by report.counter">
+                                <td data-title="'Zeit'" sortable="'time'">{{report.time | date:'HH:mm:ss'}}</td>
+                                <td data-title="'GPS Fixzeit'" sortable="'gps_fixtime'">{{report.gps_fixtime | date:'HH:mm:ss'}}</td>
+                                <td data-title="'geogr. Breite (DDD)'">{{report.gps_latitude | number:4}}</td>
+                                <td data-title="'geogr. Länge (DDD)'">{{report.gps_longitude | number:4}}</td>
+                                <td data-title="'Höhe (m)'">{{report.gps_altitude | number:2}}</td>
+                                <td data-title="'Geschwindigkeit (m/s)'">{{report.gps_speed | number:2}}</td>
+                                <td data-title="'Beschl. X-Achse (m/s&sup2;)'">{{report.acc_axis_x | number:2}}</td>
+                                <td data-title="'Beschl. Y-Achse (m/s&sup2;)'">{{report.acc_axis_y | number:2}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>   
+                <!-- /.row -->
+            </div>
+            <div ng-if="currentTab === 2" class="tab-pane fade in active">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <leaflet center="mapCenter" paths="mapPaths" markers="mapMarkers" defaults="mapDefaults" height="500"></leaflet>
+                    </div>
+                </div>   
+                <!-- /.row -->
+            </div>
+        </div>
+
+    </div>
+        
+</div>
+
+<!-- /.row -->

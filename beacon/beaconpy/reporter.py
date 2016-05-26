@@ -63,7 +63,8 @@ class ReportBuilder(threading.Thread):
       
 class ReportDispatcher(threading.Thread):
   """
-  Class for threads which consumes reports from a queue, stores
+  Class for threads which consume single reports from the queue and build a final report.
+  This final report will be JSON encoded and is then stored in the filesystem (timestamp.json) or send to a server via HTTP .
   """
   
   def __init__(self, trip_dict = data.trip_dict, report_queue = data.report_queue):

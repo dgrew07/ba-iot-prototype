@@ -1,0 +1,25 @@
+<!-- page heading -->
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">
+            Fahrtenübersicht <small>gesamter Zeitraum</small> <a class="pull-right" href ng-click="refresh()" ><i class="fa fa-refresh"> </i></a>
+        </h2>
+        
+    </div>
+</div>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <table ng-table="tripsTable" class="table table-bordered table-striped table-condensed">
+            <tr ng-repeat="trip in data track by trip._id">
+                <td data-title="'Beschreibung'">{{trip.info}}</td>
+                <td data-title="'Fahrtstart'" sortable="'time_start'">{{trip.time_start | date:'dd.MM.yyyy HH:mm'}}</td>
+                <td data-title="'Fahrtende'" sortable="'time_end'">{{trip.time_end | date:'dd.MM.yyyy HH:mm'}}</td>
+                <td data-title="'Fahrzeit'" sortable="'time_diff'">{{trip.time_diff | duration}}</td>
+                <td data-title="'Analysestatus'" sortable="'analysed'"><i ng-show="trip.analysed" class="fa fa-check" aria-hidden="true"></i><i ng-hide="trip.analysed" class="fa fa-cog" aria-hidden="true"></td>
+                <td data-title="'Details'"><a href="#/trips/{{trip._id}}"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></td>
+            </tr>
+        </table>
+    </div>
+</div>   
+<!-- /.row -->

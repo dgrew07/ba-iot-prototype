@@ -12,16 +12,16 @@ def main():
   try:
     
     # run calibration on startup
-    #if config.calibrate_acc == True:
+    if config.calibrate_acc == True:
+      from calibration import accelerometer
       #import calibration.accelerometer
+      tempoffs = accelerometer.calibrate_acc(config.acc_power_mgmt_1, config.acc_power_mgmt_2, config.acc_bus, config.acc_address, config.acc_addr_x, config.acc_addr_y, config.acc_addr_z)
+    else:
+      tempoffs = helpers.Bunch(x = 0, y = 0, z = 0)
       
-      
-      
-    # init dispatching thread_acc
-    thread_repdispatcher = reporter.ReportDispatcher(data.trip_dict, data.report_queue)
     # init + start poller threads
     thread_gps = poller.GpsPoller(config.tick_gpspoller, data.gps_dict) 
-    thread_acc = poller.AccPoller(config.tick_gpspoller, data.acc_dict, config.acc_power_mgmt_1, config.acc_power_mgmt_2, config.acc_bus, config.acc_address, config.acc_addr_x, config.acc_addr_y, config.acc_addr_z, 0, 0, 0) 
+    thread_acc = poller.AccPoller(config.tick_gpspoller, data.acc_dict, config.acc_power_mgmt_1, config.acc_power_mgmt_2, config.acc_bus, config.acc_address, config.acc_addr_x, config.acc_addr_y, config.acc_addr_z, tempoffs.x, tempoffs.y, tempoffs.z) 
     thread_gps.start() 
     thread_acc.start() 
     print 'Starte Sensoren ... Bitte warten.'
@@ -35,9 +35,12 @@ def main():
     else:
       print '\nInternetverbindung ist NICHT aktiv\n'
     
-    # init + start reporting threads
+    # init + start reporting thread
     thread_repbuilder = reporter.ReportBuilder(config.tick_repbuilder, data.report_dict, data.gps_dict, data.acc_dict)
     thread_repbuilder.start()
+    
+    # init dispatching thread_acc
+    thread_repdispatcher = reporter.ReportDispatcher(data.trip_dict, data.report_queue)
     
     while True:
       # debug -- visualize most current data

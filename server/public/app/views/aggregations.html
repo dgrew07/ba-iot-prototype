@@ -1,0 +1,36 @@
+<!-- page heading -->
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">
+            Aggregationsübersicht <small> </small> <a class="pull-right" href ng-click="refresh()" ><i class="fa fa-refresh"> </i></a>
+        </h2>
+        
+    </div>
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <center>
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i> <strong>Neue Aggregationen sind manuell zu erstellen.</strong> <br><br>
+                <button ng-click="aggregateNew()" type="button" class="btn btn-default">Aggregation jetzt durchführen <i class="fa fa-line-chart" aria-hidden="true"></i></button>
+            </center>
+        </div>
+    </div>
+</div>   
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+        <table ng-table="aggregationsTable" class="table table-bordered table-striped table-condensed">
+            <tr ng-repeat="aggregation in data track by aggregation._id">
+                <td data-title="'Zeit'" sortable="'time'">{{aggregation.time | date:'dd.MM.yyyy HH:mm'}}</td>
+                <td data-title="'Berücksichtigte Fahrten'" sortable="'count'">{{aggregation.count}}</td>
+                <td data-title="'Details'"><a href="#/aggregations/{{aggregation._id}}"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i></a></td>
+            </tr>
+        </table>
+    </div>
+</div>   
+<!-- /.row -->

@@ -1,0 +1,136 @@
+<!-- page heading -->
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">
+            Aggregation vom {{aggregation.time | date:'dd.MM.yyyy'}} um {{aggregation.time | date:'HH:mm'}} Uhr <small>&nbsp;&nbsp;&nbsp;{{aggregation.count}} einbezogene Fahrten</small> 
+            <span class="pull-right"><a href ng-click="refresh()"><i class="fa fa-refresh"> </i></a> &nbsp; <a href ng-click="deleteAggregation()"><i class="fa fa-trash-o" aria-hidden="true"></i></a></span>
+        </h3>
+    </div>
+</div>
+<!-- /.row -->
+
+<div class="row">
+    <div class="col-lg-12">
+    
+        <div class="panel panel-default">
+            <div class="panel-heading">Fahrzeit und gefahrene Kilometer</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3"><b>&#216; gefahrene km</b>: <br>{{aggregation.length_mean | number:2}} km
+                    </div>
+                    <div class="col-lg-3"><b>&sigma; gefahrene km</b>: <br>{{aggregation.length_std | number:2}} km
+                    </div>
+                    <div class="col-lg-3"><b>&#216; Fahrzeit</b>: <br> {{aggregation.duration_mean | duration}} Std.
+                    </div>
+                    <div class="col-lg-3"><b>&sigma; Fahrzeit</b>: <br> {{aggregation.duration_std | duration}} Std.
+                    </div>
+                </div>     
+            </div>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Geschwindigkeit</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3"><b>&#216; Geschwindgkeit</b>: <br>{{aggregation.speed_mean | number:2}} km
+                    </div>
+                    <div class="col-lg-3"><b>&sigma; Geschwindgkeit</b>: <br>{{aggregation.speed_std | number:2}} km
+                    </div>
+                    <div class="col-lg-3"><b>&#216; max. Geschwindgkeit</b>: <br>{{aggregation.speedmax_mean | number:2}} km
+                    </div>
+                    <div class="col-lg-3"><b>&sigma; max. Geschwindgkeit</b>: <br>{{aggregation.speedmax_std | number:2}} km
+                    </div>
+                </div>   
+                <div class="row">
+                    <div class="col-lg-6"><b>&#216; # Übertretungen</b>: <br>{{aggregation.speedviol_mean | number:2}} km
+                    </div>
+                    <div class="col-lg-6"><b>&sigma; # Übertretungen</b>: <br>{{aggregation.speedviol_std | number:2}} km
+                    </div>
+                </div>                   
+            </div>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Beschleunigungsverhalten</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3"><b>&#216; Beschleunigung</b>: <br>{{aggregation.accxpos_mean | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-3"><b>&sigma; Beschleunigung</b>: <br>{{aggregation.accxpos_std | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-3"><b>&#216; max. Beschleunigung</b>: <br>{{aggregation.accxposmax_mean | number:2}} m/s&sup2;
+                    </div>  
+                    <div class="col-lg-3"><b>&sigma; max. Beschleunigung</b>: <br>{{aggregation.accxposmax_std | number:2}} m/s&sup2;
+                    </div>  
+                    
+                </div>    
+            </div>    
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Bremsverhalten</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3"><b>&#216; Bremskraft</b>: <br>{{aggregation.accxneg_mean | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-3"><b>&sigma; Bremskraft</b>: <br>{{aggregation.accxneg_std | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-3"><b>&#216; max. Bremskraft</b>: <br>{{aggregation.accxnegmax_mean | number:2}} m/s&sup2;
+                    </div>  
+                    <div class="col-lg-3"><b>&sigma; max. Bremskraft</b>: <br>{{aggregation.accxnegmax_std | number:2}} m/s&sup2;
+                    </div>  
+                    
+                </div>    
+            </div>    
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Kurvenfahrverhalten Rechtskurven</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3"><b>&#216; Kraft</b>: <br>{{aggregation.accypos_mean | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-3"><b>&sigma; Kraft</b>: <br>{{aggregation.accypos_std | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-3"><b>&#216; max. Kraft</b>: <br>{{aggregation.accyposmax_mean | number:2}} m/s&sup2;
+                    </div>  
+                    <div class="col-lg-3"><b>&sigma; max. Kraft</b>: <br>{{aggregation.accyposmax_std | number:2}} m/s&sup2;
+                    </div>  
+                    
+                </div>    
+            </div>    
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Kurvenfahrverhalten Linkskurven</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-3"><b>&#216; Kraft</b>: <br>{{aggregation.accyneg_mean | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-3"><b>&sigma; Kraft</b>: <br>{{aggregation.accyneg_std | number:2}} m/s&sup2;
+                    </div> 
+                    <div class="col-lg-3"><b>&#216; max. Kraft</b>: <br>{{aggregation.accynegmax_mean | number:2}} m/s&sup2;
+                    </div>  
+                    <div class="col-lg-3"><b>&sigma; max. Kraft</b>: <br>{{aggregation.accynegmax_std | number:2}} m/s&sup2;
+                    </div>  
+                    
+                </div>    
+            </div>    
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">Streckeninformationen</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6"><b>&#216; bevorzugter Straßentyp</b>: <br>{{aggregation.fav_highway}}
+                    </div> 
+                    <div class="col-lg-6"><b>Ort der Fahrt</b>: <br>{{aggregation.fav_location}}
+                    </div>  
+                </div>    
+            </div>    
+        </div>
+        
+        
+    </div>  
+</div>
+<!-- /.row -->

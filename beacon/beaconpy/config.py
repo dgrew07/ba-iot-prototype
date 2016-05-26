@@ -27,7 +27,7 @@ Calibrate MPU-6050 accelerometer sensor output on startup.
 Calculated offsets CAN be written to the MPU-6050 directly, but this feature should only be used once the sensor is properly installed.
 """
 # calibrate_gps = False  << GPS calibration makes little to no sense right now. >>
-calibrate_acc = False
+calibrate_acc = True
 
 """
 Refresh rates of the threads polling sensor data.
