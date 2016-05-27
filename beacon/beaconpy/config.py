@@ -56,4 +56,4 @@ acc_addr_x = 0x3b
 acc_addr_y = 0x3d
 acc_addr_z = 0x3f
 acc_oneg = 9.80665 # 1G = 9,80665 m/s^2 (normal falling acceleration DIN 1305) or use 1G = 9,81 m/s^2 (in general)
-acc_range = 2 # default range is +/- 2G
+acc_range = 4 # default range is +/- 2G

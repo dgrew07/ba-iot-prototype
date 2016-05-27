@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# kill gpsd processes
+# kill running gpsd processes
 killall gpsd
 sleep 1
 

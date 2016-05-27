@@ -201,8 +201,9 @@ app.get('/api/analysis/:id', function (req, res) {
     var tempmaxspeed = 0;
     
     // determine the bounding box for the OSM API call, call the API, get desired values
-    for(var i = 10, len = arr_speedlatlong.length; i + 10 < len; i = i + 120) { 
-        // define the bounding box borders for in a 10 entry intervall
+    // due to OSM API limitations, only every 90th iteration will cause a request
+    for(var i = 10, len = arr_speedlatlong.length; i + 10 < len; i = i + 90) { 
+        // define the bounding box borders in a 10-entry intervall
         if (arr_speedlatlong[i-10].latitude <= arr_speedlatlong[i].latitude) {
             minbblat = arr_speedlatlong[i-10].latitude;
             maxbblat = arr_speedlatlong[i].latitude;
